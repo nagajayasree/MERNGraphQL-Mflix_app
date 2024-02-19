@@ -9,7 +9,6 @@ const {
   GraphQLInt,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLEnumType,
 } = require('graphql');
 
 const MovieType = new GraphQLObjectType({
@@ -21,7 +20,6 @@ const MovieType = new GraphQLObjectType({
     plot: { type: GraphQLString },
     year: { type: GraphQLInt },
     type: { type: GraphQLString },
-    genre: { type: GraphQLString },
     movieId: { type: GraphQLID },
   }),
 });
@@ -90,20 +88,6 @@ const mutationQuery = new GraphQLObjectType({
         plot: { type: GraphQLNonNull(GraphQLString) },
         year: { type: GraphQLNonNull(GraphQLID) },
         type: { type: GraphQLNonNull(GraphQLString) },
-        genre: {
-          type: new GraphQLEnumType({
-            name: 'Movie Genre',
-            values: {
-              comedy: { value: 'Comedy' },
-              horror: { value: 'Horror' },
-              thriller: { value: 'Thriller' },
-              romance: { value: 'Romance' },
-              crime: { value: 'Crime' },
-              action: { value: 'Action' },
-            },
-          }),
-          defaultValue: 'Action',
-        },
       },
       resolve(parent, args) {
         const movie = new Movie({
@@ -111,7 +95,6 @@ const mutationQuery = new GraphQLObjectType({
           plot: args.plot,
           year: args.year,
           type: args.type,
-          genre: args.genre,
         });
         return movie.save();
       },

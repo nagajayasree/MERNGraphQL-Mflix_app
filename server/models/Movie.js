@@ -16,10 +16,6 @@ const MovieSchema = new mongoose.Schema({
   type: {
     type: String,
   },
-  genre: {
-    type: String,
-    enum: ['Comedy', 'Horror', 'Thriller', 'Romance', 'Crime', 'Action'],
-  },
   movieId: {
     type: mongoose.Schema.Types.ObjectId,
   },
