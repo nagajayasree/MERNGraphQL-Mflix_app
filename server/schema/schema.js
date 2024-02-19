@@ -8,6 +8,8 @@ const {
   GraphQLSchema,
   GraphQLInt,
   GraphQLList,
+  GraphQLNonNull,
+  GraphQLEnumType,
 } = require('graphql');
 
 const MovieType = new GraphQLObjectType({
@@ -15,9 +17,11 @@ const MovieType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
+    poster: { type: GraphQLString },
     plot: { type: GraphQLString },
     year: { type: GraphQLInt },
     type: { type: GraphQLString },
+    genre: { type: GraphQLString },
     movieId: { type: GraphQLID },
   }),
 });
@@ -28,6 +32,7 @@ const UserType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     email: { type: GraphQLString },
+    password: { type: GraphQLString },
   }),
 });
 
@@ -37,10 +42,14 @@ const RootQuery = new GraphQLObjectType({
     //all movies
     movies: {
       type: new GraphQLList(MovieType),
+      // args: {
+      //   limit: { type: GraphQLID },
+      // },
       resolve() {
         return Movie.find();
       },
     },
+
     //movie by Id
     movie: {
       type: MovieType,
@@ -49,6 +58,7 @@ const RootQuery = new GraphQLObjectType({
         return Movie.findById(args.id);
       },
     },
+
     //all users
     users: {
       type: new GraphQLList(UserType),
@@ -56,6 +66,7 @@ const RootQuery = new GraphQLObjectType({
         return User.find();
       },
     },
+
     //user by Id
     user: {
       type: UserType,
@@ -67,6 +78,88 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+//mutations
+const mutationQuery = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    //adding a movie
+    addMovie: {
+      type: MovieType,
+      args: {
+        title: { type: GraphQLNonNull(GraphQLString) },
+        plot: { type: GraphQLNonNull(GraphQLString) },
+        year: { type: GraphQLNonNull(GraphQLID) },
+        type: { type: GraphQLNonNull(GraphQLString) },
+        genre: {
+          type: new GraphQLEnumType({
+            name: 'Movie Genre',
+            values: {
+              comedy: { value: 'Comedy' },
+              horror: { value: 'Horror' },
+              thriller: { value: 'Thriller' },
+              romance: { value: 'Romance' },
+              crime: { value: 'Crime' },
+              action: { value: 'Action' },
+            },
+          }),
+          defaultValue: 'Action',
+        },
+      },
+      resolve(parent, args) {
+        const movie = new Movie({
+          title: args.title,
+          plot: args.plot,
+          year: args.year,
+          type: args.type,
+          genre: args.genre,
+        });
+        return movie.save();
+      },
+    },
+
+    //deleting a movie
+    deleteMovie: {
+      type: MovieType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        return Movie.findByIdAndDelete(args.id);
+      },
+    },
+
+    //adding a user
+    addUser: {
+      type: UserType,
+      args: {
+        name: { type: GraphQLNonNull(GraphQLString) },
+        email: { type: GraphQLNonNull(GraphQLString) },
+        password: { type: GraphQLNonNull(GraphQLString) },
+      },
+      resolve(parent, args) {
+        const user = new User({
+          name: args.name,
+          email: args.email,
+          password: args.password,
+        });
+        return user.save();
+      },
+    },
+
+    //deleting a user
+    deleteUser: {
+      type: UserType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        return User.findByIdAndDelete(args.id);
+      },
+    },
+  },
+});
+
 module.exports = new GraphQLSchema({
   query: RootQuery,
+  mutation: mutationQuery,
 });

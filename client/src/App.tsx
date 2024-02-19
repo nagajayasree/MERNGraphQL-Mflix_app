@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       <h1>MFLIX APP</h1>
-      {/* <Movies /> */}
+      <Movies />
     </div>
   );
 }

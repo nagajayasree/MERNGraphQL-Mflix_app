@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const GET_MOVIES = gql`
-  query GetMovies {
-    movies {
+export const DELETE_MOVIE = gql`
+  mutation deleteMovie($id: ID!) {
+    deleteMovie(id: $id) {
       id
       title
       poster
