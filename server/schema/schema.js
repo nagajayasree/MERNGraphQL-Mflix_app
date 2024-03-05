@@ -86,14 +86,12 @@ const mutationQuery = new GraphQLObjectType({
       args: {
         title: { type: GraphQLNonNull(GraphQLString) },
         plot: { type: GraphQLNonNull(GraphQLString) },
-        year: { type: GraphQLNonNull(GraphQLID) },
         type: { type: GraphQLNonNull(GraphQLString) },
       },
       resolve(parent, args) {
         const movie = new Movie({
           title: args.title,
           plot: args.plot,
-          year: args.year,
           type: args.type,
         });
         return movie.save();

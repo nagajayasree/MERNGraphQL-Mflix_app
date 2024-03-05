@@ -10,9 +10,6 @@ export default function Header() {
         alignContent: 'space-around',
       }}
     >
-      <Link style={{ textDecoration: 'none' }} to="/">
-        Movies
-      </Link>
       <Link style={{ textDecoration: 'none' }} to="/addMovie">
         Add Movie
       </Link>

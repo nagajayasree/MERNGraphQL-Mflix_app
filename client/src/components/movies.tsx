@@ -7,13 +7,18 @@ function Movies() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
-  return data.movies.map(({ id, title, year, poster }) => (
-    <div key={id}>
-      <h3>{title}</h3>
-      <p>{year}</p>
-      {/* <img src={poster} alt={id} width="50px" height="50px" /> */}
-    </div>
-  ));
+  return (
+    <>
+      <h1>All Movies</h1>
+      {data.movies.map(({ id, title, year, poster }) => (
+        <div key={id}>
+          <h3>{title}</h3>
+          <p>{year}</p>
+          {/* <img src={poster} alt={id} width="50px" height="50px" /> */}
+        </div>
+      ))}
+    </>
+  );
 }
 
 export default Movies;
