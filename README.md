@@ -12,7 +12,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### Cient - `yarn start`
+### Client - `yarn start`
 ### Server - `yarn dev`
 
 Runs the app in the development mode.\
